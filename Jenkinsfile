@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone Source Code') {
             steps {
-                git 'https://github.com/raghavtejas1808/Scientific-Calculator-Python.git'
+                git branch: 'main', url: 'https://github.com/raghavtejas1808/Scientific-Calculator-Python.git'
             }
         }
 
