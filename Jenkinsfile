@@ -1,7 +1,11 @@
 pipeline {
     agent any
 
-      environment {
+    triggers {
+        githubPush()
+    }
+
+    environment {
         DOCKER_IMAGE = "ragh1808/scientific-calculator:${BUILD_NUMBER}"
     }
 
@@ -13,24 +17,19 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Dependencies & Run Tests') {
+            agent {
+                docker {
+                    image 'python:3.9'
+                }
+            }
             steps {
-                sh 'python3 -m pip install -r requirements.txt'            }
-        }
-
-        stage('Run Tests') {
-            steps {
+                sh 'pip install -r requirements.txt'
                 sh 'pytest'
             }
         }
 
-        stage('Build Application') {
-            steps {
-                echo "Build step completed"
-            }
-        }
-
-        stage('Docker Build') {
+        stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
@@ -44,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Deploy using Ansible') {
+        stage('Deploy with Ansible') {
             steps {
                 sh 'ansible-playbook deploy.yml'
             }
