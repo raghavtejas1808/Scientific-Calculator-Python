@@ -1,0 +1,8 @@
+- hosts: localhost
+  tasks:
+
+    - name: Pull Docker Image
+      command: docker pull ragh1808/scientific-calculator
+
+    - name: Run Container
+      command: docker run -d ragh1808/scientific-calculator
