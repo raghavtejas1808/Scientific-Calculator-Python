@@ -9,7 +9,7 @@ pipeline {
 
         stage('Clone Source Code') {
             steps {
-                git 'https://github.com/raghavtejas1808/scientific-calculator-devops.git'
+                git 'https://github.com/raghavtejas1808/Scientific-Calculator-Python.git'
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'dockerhub-credentials', url: '']) {
+                withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
                     sh 'docker push $DOCKER_IMAGE'
                 }
             }
