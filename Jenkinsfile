@@ -30,20 +30,13 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            agent {
-                dockerContainer('python:3.9') {
-                    args '-v $PWD:/app -w /app'
-                }
-            }
-            steps {
-                echo "Installing dependencies..."
-                sh 'pip install -r requirements.txt'
-
-                echo "Running test cases..."
-                sh 'pytest'
-            }
-        }
+       stage('Run Tests') {
+           agent any
+           steps {
+               sh 'docker run --rm -v $PWD:/app -w /app python:3.9 pip install -r requirements.txt'
+               sh 'docker run --rm -v $PWD:/app -w /app python:3.9 pytest'
+           }
+       }
 
         stage('Build Docker Image') {
             steps {
