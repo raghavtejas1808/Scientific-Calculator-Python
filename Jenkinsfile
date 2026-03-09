@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     options {
-        skipDefaultCheckout(true)
         ansiColor('xterm')
     }
 
@@ -16,12 +15,12 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                echo "Cloning project from GitHub..."
-                git branch: 'main', url: 'https://github.com/raghavtejas1808/Scientific-Calculator-Python.git'
-            }
-        }
+       stage('Clone Repository') {
+           steps {
+               echo "Cloning project from GitHub..."
+               checkout scm
+           }
+       }
 
         stage('Build Application') {
             steps {
