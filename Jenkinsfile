@@ -31,14 +31,12 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                echo "Running tests inside Docker..."
-                
                 sh '''
                 docker run --rm \
                 -v $PWD:/app \
                 -w /app \
                 python:3.9 \
-                sh -c "pip install -r requirements.txt && pytest"
+                sh -c "PYTHONPATH=/app pip install -r requirements.txt && PYTHONPATH=/app pytest"
                 '''
             }
         }
