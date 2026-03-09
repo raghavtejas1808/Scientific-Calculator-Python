@@ -43,8 +43,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                echo "Building Docker image..."
-                sh 'docker build -t $IMAGE_NAME .'
+                sh '''
+                docker build -t ragh1808/scientific-calculator:latest .
+                '''
             }
         }
 
@@ -59,7 +60,7 @@ pipeline {
                 )]) {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker push $IMAGE_NAME
+                    docker push ragh1808/scientific-calculator:latest
                     '''
                 }
             }

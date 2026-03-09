@@ -1,8 +1,14 @@
 - hosts: localhost
+  become: yes
+
   tasks:
 
     - name: Pull Docker Image
-      command: docker pull ragh1808/scientific-calculator
+      command: docker pull ragh1808/scientific-calculator:latest
+
+    - name: Stop old container
+      command: docker rm -f calculator
+      ignore_errors: yes
 
     - name: Run Container
-      command: docker run -d ragh1808/scientific-calculator
+      command: docker run -d --name calculator ragh1808/scientific-calculator:latest
