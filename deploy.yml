@@ -7,3 +7,6 @@
     - name: Stop old container
       command: docker rm -f calculator
       ignore_errors: yes
+
+    - name: Run Container
+      command: docker run -d --name calculator ragh1808/scientific-calculator:latest
