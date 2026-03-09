@@ -32,8 +32,8 @@ pipeline {
 
         stage('Run Tests') {
             agent {
-                docker {
-                    image 'python:3.9'
+                dockerContainer('python:3.9') {
+                    args '-v $PWD:/app -w /app'
                 }
             }
             steps {
