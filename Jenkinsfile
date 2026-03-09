@@ -15,27 +15,33 @@ pipeline {
 
     stages {
 
-       stage('Clone Repository') {
-           steps {
-               echo "Cloning project from GitHub..."
-               checkout scm
-           }
-       }
+        stage('Checkout Code') {
+            steps {
+                echo "Checking out source code..."
+                checkout scm
+            }
+        }
 
         stage('Build Application') {
             steps {
-                echo "Preparing application build..."
+                echo "Build stage..."
                 sh 'echo Build completed'
             }
         }
 
-       stage('Run Tests') {
-           agent any
-           steps {
-               sh 'docker run --rm -v $PWD:/app -w /app python:3.9 pip install -r requirements.txt'
-               sh 'docker run --rm -v $PWD:/app -w /app python:3.9 pytest'
-           }
-       }
+        stage('Run Tests') {
+            steps {
+                echo "Running tests inside Docker..."
+                
+                sh '''
+                docker run --rm \
+                -v $PWD:/app \
+                -w /app \
+                python:3.9 \
+                sh -c "pip install -r requirements.txt && pytest"
+                '''
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -46,7 +52,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                echo "Pushing Docker image to DockerHub..."
+                echo "Pushing Docker image..."
 
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub',
@@ -54,9 +60,6 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo "Checking Docker connection..."
-                    docker info
-
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                     docker push $IMAGE_NAME
                     '''
@@ -66,9 +69,19 @@ pipeline {
 
         stage('Deploy with Ansible') {
             steps {
-                echo "Deploying application using Ansible..."
+                echo "Deploying application..."
                 sh 'ansible-playbook deploy.yml'
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline completed successfully 🚀"
+        }
+
+        failure {
+            echo "Pipeline failed ❌"
         }
     }
 }
