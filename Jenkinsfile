@@ -69,7 +69,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 echo "Deploying application..."
-                sh 'ansible-playbook deploy.yml'
+                sh 'ansible-playbook deploy'
             }
         }
     }
@@ -77,7 +77,7 @@ pipeline {
  post {
         success {
             emailext(
-                subject: "Jenkins Build SUCCESS: ${env.JOB_NAME} #$env.BUILD_NUMBER",
+                subject: "Jenkins Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: "Good news! Build succeeded.\nJob: ${env.JOB_NAME}\nBuild Number: ${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}",
                 to: "sraghavtejas1808@gmail.com"
             )
