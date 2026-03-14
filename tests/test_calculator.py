@@ -4,7 +4,7 @@ def test_square_root():
     assert square_root(16) == 4
 
 def test_factorial():
-    assert factorial(5) == 12
+    assert factorial(5) == 120
 
 def test_log():
     assert round(natural_log(1), 5) == 0
