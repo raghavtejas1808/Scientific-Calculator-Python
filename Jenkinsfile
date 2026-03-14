@@ -69,7 +69,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 echo "Deploying application..."
-                sh 'ansible-playbook deploy'
+                sh 'ansible-playbook deploy.yml'
             }
         }
     }
