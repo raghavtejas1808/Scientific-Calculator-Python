@@ -11,6 +11,7 @@ def square_root(x):
     logging.info(f"Square root of {x}")
     return math.sqrt(x)
 
+
 def factorial(x):
     logging.info(f"Factorial of {x}")
     return math.factorial(x)
